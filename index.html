@@ -24,20 +24,72 @@ canvas{
 
     // ahora creo la función para pintar la pantalla, que se ejecutará cada vez que se refresque o haya un cambio en la pantalla (UN LOOP) En vez de hacer un setTimeOut para que se ejecute cada X segundos, el requestAnimationFrame se ejecutara cada segundo (60 veces x min)
 
+    // VARIABLES PELOTA
+    const ballRadius = 3;  // tamaño de la pelota
+    // posición de la pelota
+    let x = canvas.width / 2;
+    let y = canvas.height - 30;
+    //dirección y velocidad de la pelota
+    let dx = -2;
+    let dy = -2;
+
+    // VARIABLES PADDLE
+    const paddleHeight = 10; // tamaño paddle (alto)
+    const paddleWidth = 50; // tamaño paddle (ancho)
+    let paddleX = (canvas.width - paddleWidth) / 2; // posición inicial del paddle (se actualizará con el movimiento)
+    let paddleY = canvas.height - paddleHeight - 10;
+
     function drawBall(){
-        
+        ctx.beginPath(); // inicia el trazado
+        ctx.arc(x, y, ballRadius, 0, Math.PI*2); // dónde se dibuja la pelota
+        ctx.fillStyle = '#fff'; // color
+        ctx.fill(); // pintar la pelota
+        ctx.closePath(); // cierra el trazado
     }
-    function drawPaddle(){   }
+
+    function drawPaddle(){
+        ctx.fillStyle = 'darkred';
+        ctx.fillRect(
+            paddleX, 
+            paddleY, 
+            paddleWidth, 
+            paddleHeight);
+    }
     function drawBricks(){    }
 
     function collisionDetection(){}
-    function ballMovement(){}
+    function ballMovement(){
+        // rebotar en las paredes laterales
+        if (
+            x + dx > canvas.width - ballRadius || // pared derecha
+            x + dx < ballRadius // pared izquierda
+        ){
+            dx = -dx;
+        }
+
+        // rebotar en la superior
+        if(y + dy < ballRadius){
+            dy = -dy;
+        }
+
+        // game over si cae abajo
+
+        if(y + dy > canvas.height - ballRadius){
+            console.log('Game Over');
+            document.location.reload();
+        }
+        x += dx;    // movimiento lateral
+        y += dy;    // movimiento vertical
+    }
     function paddleMovement(){}
 
     function draw(){
         // esta función chequea constantemente las colisiones y en función de eso, irá pintando el "tablero". 
-        // Para ello primero dibujo todos los elementos que deben aparecer en pantalla
 
+        // Limpiar el canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Dibujo todos los elementos
         drawBall();
         drawPaddle();
         drawBricks();
