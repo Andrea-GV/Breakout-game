@@ -24,7 +24,7 @@ Pasos para crear el juego:
 6.  Comienzo a definir el movimiento de la pelota <b>function ballMovement</b> con un movimiento lateral y vertical
 
 7.  Al definir el movimiento no elimina cada movimiento anterior, con lo que hace una trazada, la trayectoria completa.
-    Para ello, he creado la <b>function clearCanvas</b>
+    Para ello, he creado la <b>function cleanCanvas</b> que elimina el rastro de cada frame anterior.
 
 8.  A la <b>function draw</b> le defino la limpieza del canvas:
 
@@ -60,8 +60,21 @@ Pasos para crear el juego:
       - - > > Log de acaba el juego
       - - > > Recarga
 
+\*\*\* Como no se estaba ejecutando el reload. He tenido que añadir un setTimeout y otro if interno para comprobar si !gameOver inicializado en false, ejecutase el reload.\*\*\*
+
 10. <b>Crear el paddle</b> con el que jugar.
+
     - Declaro las variables que definen el tamaño de la paddle
     - Su posición horizontal inicial en la pantalla ( en el centro )
     - Y la vertical (para que no esté abajo del todo)
-11. <b>Dibujar el paddle</b>. En vez de usar la técnica para la pelota, uso fillRect (que dibuja rectángulos) al que le defino en qué coordenada posicionarlo (X e Y), y defino el width y el height. Como ya he declarado variables con esos tamaños, las invoco.
+
+11. <b>Dibujar el paddle en function drawPaddle</b>. En vez de usar la técnica para la pelota, uso fillRect (que dibuja rectángulos) al que le defino en qué coordenada posicionarlo (X e Y), y defino el width y el height. Como ya he declarado variables con esos tamaños, las invoco.
+
+12. Creo la función <b>initEvents</b>para recoger el evento (movimiento del paddle) del teclado.
+
+    - Recojo cuando se presiona (keydown)
+    - Cuando suelta (keyup)
+
+    - Creo las variables rightPressed y leftPressed para recoger esta información y poder actualizar el estado de la paddle en función de qué tecla se ha pulstado. Las inicializo en false.
+
+    - Creo la función <b>keyDownHandler</b> que recoge la info de la tecla pulsada y cambia a true para que se mueva el paddle

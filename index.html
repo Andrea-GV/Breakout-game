@@ -39,6 +39,10 @@ canvas{
     let paddleX = (canvas.width - paddleWidth) / 2; // posición inicial del paddle (se actualizará con el movimiento)
     let paddleY = canvas.height - paddleHeight - 10;
 
+    // variables para recoger qué tecla se pulsa y mover el paddle
+    let rightPressed = false;
+    let leftPressed = false;
+
     function drawBall(){
         ctx.beginPath(); // inicia el trazado
         ctx.arc(x, y, ballRadius, 0, Math.PI*2); // dónde se dibuja la pelota
@@ -58,6 +62,8 @@ canvas{
     function drawBricks(){    }
 
     function collisionDetection(){}
+
+    let gameOver = false;
     function ballMovement(){
         // rebotar en las paredes laterales
         if (
@@ -73,21 +79,48 @@ canvas{
         }
 
         // game over si cae abajo
-
         if(y + dy > canvas.height - ballRadius){
-            console.log('Game Over');
-            document.location.reload();
+            if(!gameOver){
+                console.log('Game Over');
+                gameOver = true;
+                setTimeout(() => {document.location.reload()}, 500);              
+            }
+            return;
         }
         x += dx;    // movimiento lateral
         y += dy;    // movimiento vertical
     }
     function paddleMovement(){}
+    function cleanCanvas(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    function initEvents(){
+        document.addEventListener('keydown', keyDownHandler)
+        document.addEventListener('keyup', keyUpHandler)
+
+        function keyDownHandler (event){
+            const { key } = event; 
+            if (key === 'Right' || key === 'ArrowRight'){
+                rightPressed = true;
+            } else if (key === 'Left' || key === 'ArrowLeft'){
+                leftPressed = true; 
+            }
+        }
+
+        function keyUpHandler(event) {
+            const {key} = event;
+            if (key === 'Right' || key === 'ArrowRight') {
+                rightPressed = false;
+            } else if (key === 'Left' || key === 'ArrowLeft') {
+                leftPressed = false;
+            }
+        }
+    }
+
 
     function draw(){
+        cleanCanvas();
         // esta función chequea constantemente las colisiones y en función de eso, irá pintando el "tablero". 
-
-        // Limpiar el canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // Dibujo todos los elementos
         drawBall();
@@ -102,5 +135,6 @@ canvas{
         window.requestAnimationFrame(draw);
     }
     draw();
+    initEvents();
 
 </script>
