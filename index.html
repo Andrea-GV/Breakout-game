@@ -30,8 +30,8 @@ canvas{
     let x = canvas.width / 2;
     let y = canvas.height - 30;
     //dirección y velocidad de la pelota
-    let dx = -2;
-    let dy = -2;
+    let dx = -3;
+    let dy = -3;
 
     // VARIABLES PADDLE
     const paddleHeight = 10; // tamaño paddle (alto)
@@ -39,7 +39,7 @@ canvas{
     let paddleX = (canvas.width - paddleWidth) / 2; // posición inicial del paddle (se actualizará con el movimiento)
     let paddleY = canvas.height - paddleHeight - 10;
 
-    // sensibilidad del paddle para ajustar la velocidad de movimiento (por si quiero ir aumentándole según pase el tiempo más adelante)
+    // sensibilidad del paddle para ajustar la velocidad de movimiento
     let paddle_sensitivity = 8;
 
     // variables para recoger qué tecla se pulsa y mover el paddle
@@ -80,9 +80,20 @@ canvas{
         if(y + dy < ballRadius){
             dy = -dy;
         }
+        // constante para comprobar si pala y pelota están en la misma posición horizontal
+        const isBallSameXAsPaddle = 
+            x > paddleX &&
+            x < paddleX + paddleWidth;
+        // vertical
+        const isBallTouchingPaddle = 
+            y + dy > paddleY;
 
+        // rebote en el paddle
+        if(isBallSameXAsPaddle && isBallTouchingPaddle){
+            dy = -dy; // cambia dirección
+        }
         // game over si cae abajo
-        if(y + dy > canvas.height - ballRadius){
+        else if(y + dy > canvas.height - ballRadius){
             if(!gameOver){
                 console.log('Game Over');
                 gameOver = true;
@@ -90,6 +101,7 @@ canvas{
             }
             return;
         }
+
         x += dx;    // movimiento lateral
         y += dy;    // movimiento vertical
     }

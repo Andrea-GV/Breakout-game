@@ -86,3 +86,13 @@ Pasos para crear el juego:
 - Si se presiona la tecla izq, mueve el paddle a la izq
 - Ambos tienen un ternario para tener en cuenta la pared del canva, el ancho del canva y el tamaño del paddle, que sea el máximo de su movimiento y no desaparezca de la pantalla de juego
 - Añadido la variable paddle_sensibility que define la velocidad de movimiento del paddle. En vez de dejarlo como valor fijo en la función, he preferido añadir esta variable por si en un futuro quiero poder aumentar la velocidad del movimiento según pase el tiempo, queden menos ladrillos o cualquier otra función que complique un poco la jugabilidad.
+
+14. Aplicar colisión de la pelota en el paddle para que rebote y pueda jugar. Para ello, debo hacer modificaciones en la función ballMovement
+
+- Al game over si cae abajo del canva, le tengo cambio el if por un else if
+- Creo un if para el rebote al tocar el paddle
+- Creo una constante que sea un boolean, para comprobar si la pelota está en la misma posición (es decir, toca) vertical u horizontal que la paddle. Para ello:
+  - - isBallSameXAsPaddle define si la x (posición horizontal de la pelota) es menor que la paddleX (posición horizontal de la paddle) && la x es mayor que la paddleX + su ancho.
+      Es decir, comprueba que la pelota esté en un "marco" igual que la paddle
+  - - isBallTouchingPaddle define si y (posición de la pelota) + dy (dirección de la misma) es mayor que paddleY (altura del paddle)
+- Ahora al if le digo que compruebe AMBAS constantes (posición y tocar) para que la bola cambie de dirección en caso de que sea TRUE --> Le dé a la paddle
