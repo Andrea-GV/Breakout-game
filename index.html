@@ -39,6 +39,9 @@ canvas{
     let paddleX = (canvas.width - paddleWidth) / 2; // posición inicial del paddle (se actualizará con el movimiento)
     let paddleY = canvas.height - paddleHeight - 10;
 
+    // sensibilidad del paddle para ajustar la velocidad de movimiento (por si quiero ir aumentándole según pase el tiempo más adelante)
+    let paddle_sensitivity = 8;
+
     // variables para recoger qué tecla se pulsa y mover el paddle
     let rightPressed = false;
     let leftPressed = false;
@@ -90,7 +93,13 @@ canvas{
         x += dx;    // movimiento lateral
         y += dy;    // movimiento vertical
     }
-    function paddleMovement(){}
+    function paddleMovement(){
+        if(rightPressed && paddleX < canvas.width - paddleWidth){
+            paddleX += paddle_sensitivity;
+        } else if(leftPressed && paddleX > 0){
+            paddleX -= paddle_sensitivity;
+        }
+    }
     function cleanCanvas(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }

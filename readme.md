@@ -78,3 +78,11 @@ Pasos para crear el juego:
     - Creo las variables rightPressed y leftPressed para recoger esta información y poder actualizar el estado de la paddle en función de qué tecla se ha pulstado. Las inicializo en false.
 
     - Creo la función <b>keyDownHandler</b> que recoge la info de la tecla pulsada y cambia a true para que se mueva el paddle
+    - Creo la función <b>keyUpHandler</b> que recoge la info de la tecla soltada y cambia a false de nuevo
+
+13. Comienzo a definir la función <b>paddleMovement</b> :
+
+- Si se presiona la tecla derecha, mueve el paddle hacia la derecha
+- Si se presiona la tecla izq, mueve el paddle a la izq
+- Ambos tienen un ternario para tener en cuenta la pared del canva, el ancho del canva y el tamaño del paddle, que sea el máximo de su movimiento y no desaparezca de la pantalla de juego
+- Añadido la variable paddle_sensibility que define la velocidad de movimiento del paddle. En vez de dejarlo como valor fijo en la función, he preferido añadir esta variable por si en un futuro quiero poder aumentar la velocidad del movimiento según pase el tiempo, queden menos ladrillos o cualquier otra función que complique un poco la jugabilidad.
