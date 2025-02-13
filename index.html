@@ -6,18 +6,25 @@ body{
 canvas{
     border: 4px solid white;
     border-bottom: transparent;
-    background-color: #000;
+    background: url('./bkg.png') repeat;
     margin: 7rem auto;
     display: block;
 }
 
 </style>
 <canvas></canvas>
+<img hidden id="sprite" src="./sprite.png" alt="Sprite Breakout">
+<img hidden id="bricks" src="./bricks.png" alt="Sprite Bricks Breakout">
+
 <script>
     //recupero la etiqueta canvas
     const canvas = document.querySelector('canvas');
     //recupero el contexto del canvas para pintar por encima (2D)
     const ctx = canvas.getContext('2d');
+    // capturo las imágenes por su ide
+    const $sprite = document.querySelector('#sprite');
+    const $bricks = document.querySelector('#bricks');
+
     //establezco el tamaño del canvas
     canvas.width = 448;
     canvas.height = 500;
@@ -30,8 +37,8 @@ canvas{
     let x = canvas.width / 2;
     let y = canvas.height - 30;
     //dirección y velocidad de la pelota
-    let dx = -3;
-    let dy = -3;
+    let dx = -2;
+    let dy = -2;
 
     // VARIABLES PADDLE
     const paddleHeight = 10; // tamaño paddle (alto)
@@ -39,8 +46,39 @@ canvas{
     let paddleX = (canvas.width - paddleWidth) / 2; // posición inicial del paddle (se actualizará con el movimiento)
     let paddleY = canvas.height - paddleHeight - 10;
 
+    // Variables Bricks
+    const bricksRows = 6; // nº filas a dibujar
+    const bricksCols = 12; // nº columnas
+    const bricksWidth = 30; // ancho del brick
+    const bricksHeight = 14; // alto del brick
+    const bricksPadding = 2; // separación entre bricks
+    const bricksOffsetTop = 80; // margen superior del bloque entero
+    const bricksOffsetLeft = 20; // margen lateral izquierdo del bloque entero
+    const bricks = []; // array que contendrá todos los bricks
+    const brick_status = { // estado de los bricks
+        active: 1,
+        broken: 0
+    }
+
+    // Diujar los bricks
+    for(let c = 0; c < bricksCols; c++){ // dibujo col
+        bricks[c] = []; // inicializo col vacía
+        for(let r = 0; r < bricksRows; r++){ // dibujo fila dentro de col
+            brickX = c * (bricksWidth + bricksPadding) + bricksOffsetLeft; // calculo la posicion horizontal de brick en su row
+            brickY = r * (bricksHeight + bricksPadding) + bricksOffsetTop; // calculo la posicion vertical de brick en su row
+            const random = Math.floor(Math.random() * 8); // asigno color aleatorio al brick
+            // guardo info de brick en un objeto
+            bricks[c][r] = {
+                x: brickX, 
+                y: brickY, 
+                status: brick_status.active, 
+                color: random
+            };
+        }
+    }
+
     // sensibilidad del paddle para ajustar la velocidad de movimiento
-    let paddle_sensitivity = 8;
+    let paddle_sensitivity = 7;
 
     // variables para recoger qué tecla se pulsa y mover el paddle
     let rightPressed = false;
@@ -55,12 +93,24 @@ canvas{
     }
 
     function drawPaddle(){
-        ctx.fillStyle = 'darkred';
-        ctx.fillRect(
-            paddleX, 
-            paddleY, 
-            paddleWidth, 
-            paddleHeight);
+        // ctx.fillStyle = 'darkred';
+        // ctx.fillRect(
+        //     paddleX, 
+        //     paddleY, 
+        //     paddleWidth, 
+        //     paddleHeight
+        // );
+        ctx.drawImage(
+            $sprite,
+            28,
+            174,
+            paddleWidth,
+            paddleHeight,
+            paddleX,
+            paddleY,
+            paddleWidth,
+            paddleHeight
+        );
     }
     function drawBricks(){    }
 
@@ -148,7 +198,7 @@ canvas{
         drawPaddle();
         drawBricks();
 
-        // ahora chequeo las colisiones y movimientos
+        // Chequeo las colisiones y movimientos
         collisionDetection();
         ballMovement();
         paddleMovement();
